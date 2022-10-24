@@ -1,3 +1,4 @@
+import axios from 'axios';
 import SQL, { SQLStatement } from 'sql-template-strings';
 import database from 'src/lib/elisa/database';
 import EntityService, {
@@ -10,14 +11,6 @@ export default class UserService extends EntityService<UserEntity> {
   protected lineToObject(r: any): UserEntity {
     return new UserEntity(r);
   }
-
-//   getUserByEmail(email: string) {
-//     let query: SQLStatement;
-    
-//     query = SQL`SELECT * FROM user WHERE email='${email}'`
-    
-//     const { results, err } = await 
-//   }
 
   async save(
     db: database,

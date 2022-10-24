@@ -11,8 +11,7 @@ import {
   import UserFacade from './facade';
   import UserEntity from './entity';
   import EntityController from 'src/lib/elisa/controller/entity';
-  import { JwtAuthGuard } from 'src/app/auth/guards/jwt-auth.guard';
-  // import EntityService from 'src/libraries/eliti/service/entity';
+import { LocalAuthGuard } from 'src/app/auth/guards/local-auth.guard';
   
   @Controller('user/user')
   export default class UserController extends EntityController<UserEntity> {
@@ -25,10 +24,19 @@ import {
     }
   
     protected filters(req: Request): string[] {
+      console.log(req.params)
       const filters = [];
+      req.params.email ? filters.push(`user.email='${req.params.email}'`) : null
       return filters;
     }
-  
-    @UseGuards(JwtAuthGuard)
+    
+    // @UseGuards(LocalAuthGuard)
+    @Get('/email/:email')
+    root(@Req() req: Request) {
+      const email = req.params.email
+      if(!email) throw 'Invalid email'
+      const filter = this.query(req, email)
+      return this._facade.findOne(filter)
+    }
   }
   
